@@ -1,7 +1,7 @@
 import 'dart:async';
 
+import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
-//import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter_demo/components/Medicine/ui/homepage.dart';
 
 class SuccessScreen extends StatefulWidget {
@@ -31,7 +31,11 @@ class _SuccessScreenState extends State<SuccessScreen> {
       child: Center(
         child: Container(
           child: Center(
-            child: Container(
+            child: FlareActor(
+              "assets/animations/Success Check.flr",
+              alignment: Alignment.center,
+              fit: BoxFit.contain,
+              animation: "Untitled",
             ),
           ),
         ),

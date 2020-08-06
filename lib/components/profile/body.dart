@@ -1,5 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_demo/models/patientdata.dart';
+
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'dart:async';
+import 'package:flutter/services.dart';
+
+Future<PatientData> fetchPatientData() async {
+  final response =
+  await http.get('https://wangpharma.com/pharmalink/API/login.php');
+
+  if (response.statusCode == 200) {
+    // If the server did return a 200 OK response,
+    // then parse the JSON.
+    return PatientData.fromJson(json.decode(response.body));
+  } else {
+    // If the server did not return a 200 OK response,
+    // then throw an exception.
+    throw Exception('Failed to load patient data');
+  }
+}
 
 class Body extends StatefulWidget {
   @override
@@ -11,10 +32,12 @@ class MapScreenState extends State<Body>
   bool _status = true;
   final FocusNode myFocusNode = FocusNode();
 
+  Future<PatientData> futurePatientData;
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    futurePatientData = fetchPatientData();
   }
 
   @override
@@ -118,7 +141,7 @@ class MapScreenState extends State<Body>
                                     mainAxisSize: MainAxisSize.min,
                                     children: <Widget>[
                                       new Text(
-                                        'ชื่อ-สกุล',
+                                        'ชื่อ-สกุล:',
                                         style: TextStyle(
                                             fontSize: 16.0,
                                             fontWeight: FontWeight.bold),

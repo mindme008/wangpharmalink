@@ -5,10 +5,10 @@ import 'package:flutter_demo/screens/Profile_screen.dart';
 
 class NavItem {
   final int id;
-  final String icon;
+  final String icon,text;
   final Widget destination;
 
-  NavItem({this.id, this.icon, this.destination});
+  NavItem({this.id, this.icon ,this.text, this.destination});
 
   bool destinationChecker() {
     if (destination != null ){
@@ -29,6 +29,7 @@ class NavItems extends ChangeNotifier{
     NavItem(
       id: 1,
       icon: "assets/icons/home.svg",
+      text: "",
       destination: Home(),
   ),
     NavItem(

@@ -1,17 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_demo/components/Home/CategoriesCard.dart';
-import 'package:flutter_demo/components/profile/caregiver.dart';
+import 'package:flutter_demo/components/Home/ScanScreen.dart';
+import 'package:flutter_demo/components/Home/barcode.dart';
 import 'package:flutter_demo/constants.dart';
 import 'package:flutter_demo/screens/Medicine_screen.dart';
 import 'package:flutter_demo/screens/Reminder.dart';
+import 'package:geolocator/geolocator.dart';
+
 
 class Background extends StatefulWidget {
+
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<Background> {
+
+
+  String _locationMessage = "";
+  void _getCurrentLocation() async {
+    final position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    print(position);
+
+    setState(() {
+       _locationMessage = "${position.latitude}, ${position.longitude}";
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,22 +55,28 @@ class _MyHomePageState extends State<Background> {
                   fontSize: 15,
                 ),
               ),
-              Row(
-                children: [
-                  Text(
-                    'Current location',
-                    style: TextStyle(
-                      color: kPrimaryColor,
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
+              FlatButton(
+                onPressed: () {
+                _getCurrentLocation();
+              },
+                child: Row(
+                  children: [
+                    Text(_locationMessage),
+                    Text(
+                      'Current location',
+                      style: TextStyle(
+                        color: kPrimaryColor,
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                  Icon(
-                    Icons.location_on,
-                    color: kPrimaryColor,
-                    size: 20,
-                  ),
-                ],
+                    Icon(
+                      Icons.location_on,
+                      color: kPrimaryColor,
+                      size: 20,
+                    ),
+                  ],
+                ),
               ),
               SizedBox(height: 10),
               Container(
@@ -70,7 +92,11 @@ class _MyHomePageState extends State<Background> {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(20),
                   child: FlatButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      //Navigator.push(context,
+                     // MaterialPageRoute(builder: (context) => ()),
+                    //);
+                  },
                     padding: EdgeInsets.symmetric(horizontal: 15, vertical: 22),
                     color: Colors.white,
                     splashColor: Colors.black,
@@ -226,3 +252,7 @@ class _MyHomePageState extends State<Background> {
     );
   }
 }
+
+void _getCurrentLocation() {
+}
+
