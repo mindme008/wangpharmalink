@@ -81,3 +81,59 @@ class DruglistCard extends StatelessWidget{
     );
   }
 }
+List <Product>productAll = [];
+bool isLoading = true;
+int perPage = 30;
+String act = "Pro";
+
+//var product;
+
+getProduct() async{
+
+  print(perPage);
+
+  final res = await http.get('https://wangpharma.com/API/product.php?PerPage=$perPage&act=$act');
+
+  if(res.statusCode == 200){
+
+    setState(() {
+      isLoading = false;
+
+      var jsonData = json.decode(res.body);
+
+      jsonData.forEach((products) => productAll.add(Product.fromJson(products)));
+      perPage = perPage + 30;
+
+      print(productAll);
+      print(perPage);
+
+      return productAll;
+
+    });
+
+
+  }else{
+    throw Exception('Failed load Json');
+  }
+}
+
+@override
+void initState() {
+  // TODO: implement initState
+  super.initState();
+  getProduct();
+
+  _scrollController.addListener((){
+    //print(_scrollController.position.pixels);
+    if(_scrollController.position.pixels == _scrollController.position.maxScrollExtent){
+      getProduct();
+    }
+  });
+}
+
+@override
+void dispose() {
+  // TODO: implement dispose
+  _scrollController.dispose();
+  super.dispose();
+}
