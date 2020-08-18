@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_demo/components/reminder/background.dart';
 import 'package:flutter_demo/components/reminder/categories.dart';
 import 'package:flutter_demo/components/reminder/druglistCard.dart';
+import 'package:flutter_demo/constants.dart';
 import 'package:flutter_demo/models/Druglist.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
@@ -31,16 +32,16 @@ class BodyState extends State<Body>{
 
     if (response.statusCode == 200) {
       var jsonResponse = json.decode(response.body);
-      print(jsonResponse);
+      //print(jsonResponse);
 
-      if (jsonResponse['msg'][0] != '0') {
+      if (jsonResponse != null) {
         jsonResponse.forEach((druglists) => druglistAll.add(druglist.fromJson(druglists)));
-        //prefs.setString("IDuser", jsonResponse['iduser']);
 
-       // Navigator.pushReplacementNamed(context, '/Home');
         print(druglistAll);
 
-        return druglistAll;
+        setState(() {
+          return druglistAll;
+        });
 
       } else {
         print('Connect ERROR');
@@ -56,25 +57,42 @@ class BodyState extends State<Body>{
     _connectDB();
   }
   @override
+  DateTime _dateTime;
   Widget build(BuildContext context) {
     // TODO: implement build
-      return SafeArea(
-        child: Background(child: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              Categories(),
-              DruglistCard(),
-              //Text("",
-              //style: TextStyle(fontWeight: FontWeight.bold),
-              //),
-              //Image.asset("assets/images/Artboard 1.png",
-              //height: size.height * 0.1,
-              //),
-            ],
-          ),
+    return SafeArea(
+      child: Background(child: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            Categories(),
+            Text(_dateTime == null ? '' : _dateTime.toString()),
+            RaisedButton(
+              color: Colors.orangeAccent,
+              child:  Icon(Icons.calendar_today,color: Colors.white,size: 30),
+              onPressed: () {
+                showDatePicker(
+                    context: context,
+                    initialDate: _dateTime == null ? DateTime.now() : _dateTime,
+                    firstDate: DateTime(2001),
+                    lastDate: DateTime(2025)
+                ).then((date) {
+                  setState(() {
+                    _dateTime = date;
+                  });
+                });
+              },
+            ),
+            DruglistCard(druglist:druglistAll),
+            //Text("",
+            //style: TextStyle(fontWeight: FontWeight.bold),
+            //),
+            //Image.asset("assets/images/Artboard 1.png",
+            //height: size.height * 0.1,
+            //),
+          ],
         ),
-        ),
-      );
-    }
+      ),
+      ),
+    );
   }
-
+}
