@@ -18,9 +18,7 @@ class BodyState extends State<Body>{
   var patient_code;
   List <druglist>druglistAll = [];
 
-
-
-  _connectDB() async {
+  _connectDrug() async {
     print(patient_code);
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -50,11 +48,12 @@ class BodyState extends State<Body>{
 
   }
 
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    _connectDB();
+    _connectDrug();
   }
   @override
   DateTime _dateTime;
@@ -65,30 +64,34 @@ class BodyState extends State<Body>{
         child: Column(
           children: <Widget>[
             Categories(),
-            Text(_dateTime == null ? '' : _dateTime.toString()),
-            RaisedButton(
-              color: Colors.orangeAccent,
-              child:  Icon(Icons.calendar_today,color: Colors.white,size: 30),
-              onPressed: () {
-                showDatePicker(
-                    context: context,
-                    initialDate: _dateTime == null ? DateTime.now() : _dateTime,
-                    firstDate: DateTime(2001),
-                    lastDate: DateTime(2025)
-                ).then((date) {
-                  setState(() {
-                    _dateTime = date;
+            Container(
+              alignment: Alignment.topRight,
+              child: new FloatingActionButton(child: new Icon(Icons.calendar_today), heroTag: 2,
+                onPressed: () {
+                  showDatePicker(
+                      context: context, initialDate: _dateTime == null ? DateTime.now() : _dateTime,
+                      firstDate: DateTime(2001),
+                      lastDate: DateTime(2025)
+                  ).then((date) {
+                    setState(() {
+                      _dateTime = date;
+                    });
                   });
-                });
-              },
+                },
+                backgroundColor: Colors.orange,
+              ),
             ),
+            Text(_dateTime == null ? '' : _dateTime.toString()),
             DruglistCard(druglist:druglistAll),
-            //Text("",
-            //style: TextStyle(fontWeight: FontWeight.bold),
+
+
+            //Text("รายละเอียดยา",
+            //style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
             //),
             //Image.asset("assets/images/Artboard 1.png",
             //height: size.height * 0.1,
             //),
+
           ],
         ),
       ),
