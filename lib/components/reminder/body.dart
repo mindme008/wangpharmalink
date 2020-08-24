@@ -17,7 +17,9 @@ class Body extends StatefulWidget {
 
 class BodyState extends State<Body>{
   var patient_code;
+
   List <druglist>druglistAll = [];
+
 
   _connectDrug() async {
     print(patient_code);
@@ -47,8 +49,6 @@ class BodyState extends State<Body>{
       }
     }
   }
-
-
 
   @override
   void initState() {
@@ -146,7 +146,10 @@ class DruglistCard extends StatelessWidget {
 
   var druglist;
 
+  List statusOrderDrug = ['','ก่อนอาหาร 30 นาที','หลังอาหารทันที','หลังอาหาร 15 นาที','ขณะท้องว่าง'];
+
   DruglistCard({Key key, this.druglist }) : super(key: key);
+
 
   @override
   Widget build(BuildContext context) {
@@ -168,7 +171,7 @@ class DruglistCard extends StatelessWidget {
                       title: new Text('แจ้งเตือนรับประทานยาวันที่ :${druglist[index].drugStart}',style: TextStyle(color: kPrimaryColor)),
                       content: new Text('${druglist[index].drugName} ครั้งละ ${druglist[index]
                           .drugDose} ${druglist[index].drugUnitdose} ${druglist[index].drugIndication} '
-                          '${druglist[index].drugDescription}'),
+                          '${druglist[index].drugDescription} ${statusOrderDrug[int.parse(druglist[index].drugOrder)]}'),
                       actions: <Widget>[
                         FlatButton(
                           child: Text("OK",style: TextStyle(color: kPrimaryColor),),
