@@ -195,8 +195,7 @@ class MainSection extends StatelessWidget {
     } else if (medicine.medicineType == "Pill") {
       return Hero(
         tag: medicine.medicineName + medicine.medicineType,
-        child: Icon(
-          IconData(0xe901),
+        child: Icon(Icons.error,
           color: kPrimaryColor,
           size: size,
         ),
