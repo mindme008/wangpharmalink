@@ -3,11 +3,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_demo/components/Home/CategoriesCard.dart';
 import 'package:flutter_demo/components/Home/ScanScreen.dart';
 import 'package:flutter_demo/components/Home/barcode.dart';
+import 'package:flutter_demo/components/Home/body.dart';
+import 'package:flutter_demo/components/reminder/NotificationPlugin.dart';
+import 'package:flutter_demo/components/reminder/calendar.dart';
 import 'package:flutter_demo/constants.dart';
 import 'package:flutter_demo/screens/Medicine_screen.dart';
 import 'package:flutter_demo/screens/Reminder.dart';
 import 'package:geolocator/geolocator.dart';
 
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class Background extends StatefulWidget {
 
@@ -17,6 +21,15 @@ class Background extends StatefulWidget {
 
 class _MyHomePageState extends State<Background> {
 
+  Future _showNotification() async {
+    var androidDetails = new AndroidNotificationDetails(
+        "Channel ID", "Desi programmer", "This is my channel",
+        importance: Importance.Max);
+    var iOSDetails = new IOSNotificationDetails();
+    var generalNotificationDetails =
+    new NotificationDetails(androidDetails, iOSDetails);
+  }
+
 
   String _locationMessage = "";
   void _getCurrentLocation() async {
@@ -24,7 +37,7 @@ class _MyHomePageState extends State<Background> {
     print(position);
 
     setState(() {
-       _locationMessage = "${position.latitude}, ${position.longitude}";
+      _locationMessage = "${position.latitude}, ${position.longitude}";
     });
   }
 
@@ -57,8 +70,8 @@ class _MyHomePageState extends State<Background> {
               ),
               FlatButton(
                 onPressed: () {
-                _getCurrentLocation();
-              },
+                  _getCurrentLocation();
+                },
                 child: Row(
                   children: [
                     Text(_locationMessage),
@@ -94,9 +107,9 @@ class _MyHomePageState extends State<Background> {
                   child: FlatButton(
                     onPressed: () {
                       //Navigator.push(context,
-                     // MaterialPageRoute(builder: (context) => ()),
-                    //);
-                  },
+                      // MaterialPageRoute(builder: (context) => ()),
+                      //);
+                    },
                     padding: EdgeInsets.symmetric(horizontal: 15, vertical: 22),
                     color: Colors.white,
                     splashColor: Colors.black,
@@ -151,10 +164,10 @@ class _MyHomePageState extends State<Background> {
                   children: [
                     FlatButton(
                       onPressed: () {
-                       Navigator.push(context,
-                       MaterialPageRoute(builder: (context) => ReminderScreen()),
-                       );
-                       },
+                        Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => ReminderScreen()),
+                        );
+                      },
                       child: CategoryCard(
                         title: 'Reminders',
                         icon: Icons.alarm_on,
@@ -174,7 +187,7 @@ class _MyHomePageState extends State<Background> {
                     FlatButton(
                       onPressed: () {
                         Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => ReminderScreen()),
+                          MaterialPageRoute(builder: (context) => notiHome()),
                         );
                       },
                       child: CategoryCard(
@@ -185,7 +198,7 @@ class _MyHomePageState extends State<Background> {
                     FlatButton(
                       onPressed: () {
                         Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => ReminderScreen()),
+                          MaterialPageRoute(builder: (context) => HomebodyPage()),
                         );
                       },
                       child: CategoryCard(
@@ -220,30 +233,30 @@ class _MyHomePageState extends State<Background> {
               ),
               SizedBox(height: 15),
               //Container(
-                //padding: EdgeInsets.symmetric(vertical: 14,horizontal: 18),
-                //margin: EdgeInsets.only(bottom: 20.0),
-                //decoration: BoxDecoration(
-                  //child: Row(
-                    //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    //crossAxisAlignment: CrossAxisAlignment.start,
-                    //children: <Widget>[
-                      //CircleAvatar(
-                        //backgroundColor: Colors.grey,
-                        //radius: 36,
-                      //),
-                      //SizedBox(width: 10),
-                      //Column(
-                        //children: <Widget>[
-                          //RichText(
-                            //text: TextSpan(
+              //padding: EdgeInsets.symmetric(vertical: 14,horizontal: 18),
+              //margin: EdgeInsets.only(bottom: 20.0),
+              //decoration: BoxDecoration(
+              //child: Row(
+              //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //crossAxisAlignment: CrossAxisAlignment.start,
+              //children: <Widget>[
+              //CircleAvatar(
+              //backgroundColor: Colors.grey,
+              //radius: 36,
+              //),
+              //SizedBox(width: 10),
+              //Column(
+              //children: <Widget>[
+              //RichText(
+              //text: TextSpan(
 
-                            //)
-                          //)
-                        //],
-                      //)
-                    //],
-                  //)
-                //),
+              //)
+              //)
+              //],
+              //)
+              //],
+              //)
+              //),
               //),
             ],
           ),
@@ -255,4 +268,5 @@ class _MyHomePageState extends State<Background> {
 
 void _getCurrentLocation() {
 }
+
 
