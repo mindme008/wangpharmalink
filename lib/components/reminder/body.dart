@@ -3,14 +3,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_demo/Notification/sharedPrefs.dart';
 import 'package:flutter_demo/components/reminder/background.dart';
-import 'package:flutter_demo/Notification/notificationHelper.dart';
 import 'package:flutter_demo/components/reminder/categories.dart';
-import 'package:flutter_demo/components/reminder/druglistCard.dart';
 import 'package:flutter_demo/constants.dart';
 import 'package:flutter_demo/models/Druglist.dart';
 import 'package:flutter_demo/size.config.dart';
-import 'package:intl/intl.dart';
 
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:http/http.dart' as http;
@@ -52,13 +50,13 @@ class BodyState extends State<Body> {
       //print(jsonResponse);
 
       if (jsonResponse != null) {
-        jsonResponse.forEach((druglists) =>
-            druglistAll.add(druglist.fromJson(druglists)));
+        jsonResponse.forEach((druglists) => druglistAll.add(druglist.fromJson(druglists)));
 
         druglistAll.forEach((druglist) async {
           WidgetsFlutterBinding.ensureInitialized();
           await AndroidAlarmManager.initialize();
           onTimePeriodic();
+
         });
 
 
@@ -116,7 +114,7 @@ class BodyState extends State<Body> {
   }
 
   static periodicCallback() {
-    DruglistCard().showNotificationBtweenInterval(druglist);
+    DruglistCard().createState().showNotificationBtweenInterval();
   }
 
   @override
@@ -227,20 +225,30 @@ class BodyState extends State<Body> {
       var a = value.getString('startTime');
       var b = value.getString('endTime');
 
+
       if (a != null && b != null) {
         setState(() {
           startTime = DateFormat('jm').format(DateTime.parse(a));
           endTime = DateFormat('jm').format(DateTime.parse(b));
+
         });
       }
     });
   }
 }
 
+class DruglistCard extends StatefulWidget {
+  var druglist;
+  DruglistCard({Key key, this.druglist }) : super(key: key);
 
-class DruglistCard extends StatelessWidget {
+  _DruglistCardState createState() =>  _DruglistCardState();
+}
+
+class _DruglistCardState extends State<DruglistCard> {
 
   var druglist;
+
+  var druglistAll;
 
   List statusOrderDrug = [
     '',
@@ -250,7 +258,12 @@ class DruglistCard extends StatelessWidget {
     'ขณะท้องว่าง'
   ];
 
-  DruglistCard({Key key, this.druglist }) : super(key: key);
+  void initState(){
+    super.initState();
+    druglistAll = widget.druglist;
+  }
+
+  //DruglistCard({Key key, this.druglist }) : super(key: key);
 
   String drugTime1, drugTime2, drugTime3, drugTime4, drugTime5, drugAlert;
   String showTime;
@@ -274,14 +287,16 @@ class DruglistCard extends StatelessWidget {
     }
     print(showTime);
     return showTime.toString();
+
   }
+
 
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
   FlutterLocalNotificationsPlugin();
   AndroidInitializationSettings androidInitializationSettings;
   IOSInitializationSettings iosInitializationSettings;
   InitializationSettings initializationSettings;
-  static BuildContext context;
+  BuildContext context;
   SharedPreferences sharedPreferences;
 
   NotificationHelper() {
@@ -317,20 +332,24 @@ class DruglistCard extends StatelessWidget {
         ));
   }
 
-  Future<void> showNotificationBtweenInterval(druglist) async {
+  Future showNotificationBtweenInterval() async {
     await initSharedPrefs();
     await notificationCompare();
+
+    print('testtt${druglistAll}');
+
 
     var now = DateTime.now();
     var currentTime =
     DateTime(now.year, now.month, now.day, now.hour, now.minute);
 
+
     var a = sharedPreferences.getString('startTime');
     var b = sharedPreferences.getString('endTime');
 
+
     print(a);
     print(b);
-
     print(currentTime);
 
     AndroidNotificationDetails androidNotificationDetails =
@@ -367,6 +386,11 @@ class DruglistCard extends StatelessWidget {
     }
   }*/
 
+    print(DateTime.parse(a).millisecondsSinceEpoch);
+    print(DateTime.parse(b).millisecondsSinceEpoch);
+
+
+
     if (DateTime.parse(a).millisecondsSinceEpoch ==
         currentTime.millisecondsSinceEpoch) {
       print(
@@ -374,14 +398,14 @@ class DruglistCard extends StatelessWidget {
       await flutterLocalNotificationsPlugin.cancel(0);
     }
 
-    if (currentTime.millisecondsSinceEpoch >=
-        DateTime.parse(a).millisecondsSinceEpoch &&
-        currentTime.millisecondsSinceEpoch <=
-            DateTime.parse(b).millisecondsSinceEpoch) {
+    if (currentTime.millisecondsSinceEpoch >= DateTime.parse(a).millisecondsSinceEpoch &&
+        currentTime.millisecondsSinceEpoch <= DateTime.parse(b).millisecondsSinceEpoch )
+    {
       print('play notification');
       await flutterLocalNotificationsPlugin.show(0, "แจ้งเตือนกินยา!",
           "ถึงเวลากินยาแล้วค่ะ", notificationDetails);
     }
+
 
     if (currentTime.millisecondsSinceEpoch >
         DateTime.parse(b).millisecondsSinceEpoch) {
@@ -393,6 +417,9 @@ class DruglistCard extends StatelessWidget {
 
   Future notificationCompare() async {
     await initSharedPrefs();
+
+
+
     var now = DateTime.now();
     var currentTime =
     DateTime(now.year, now.month, now.day, now.hour, now.minute);
@@ -400,9 +427,11 @@ class DruglistCard extends StatelessWidget {
     var a = sharedPreferences.getString('startTime');
     var b = sharedPreferences.getString('endTime');
 
+
     var onlyCurrentDate = currentTime.toString().substring(0, 10);
     var onlyStartDate = a.toString().substring(0, 10);
     var onlyEndDate = b.toString().substring(0, 10);
+
 
     if (onlyEndDate == onlyCurrentDate && onlyStartDate == onlyCurrentDate) {
       print("same date");
@@ -411,12 +440,14 @@ class DruglistCard extends StatelessWidget {
       print('date different');
       String startHour = a.substring(11, 13);
       String endHour = b.substring(11, 13);
+
       var setStart =
       DateTime(now.year, now.month, now.day, int.parse(startHour), 00);
       await setStartTime(setStart);
       var setEnd =
       DateTime(now.year, now.month, now.day, int.parse(endHour), 00);
       await setEndTime(setEnd);
+
     }
   }
 
@@ -446,17 +477,17 @@ class DruglistCard extends StatelessWidget {
                     new AlertDialog(
                       title:
                       new Text(
-                          '${druglist[index]
+                          '${widget.druglist[index]
                               .drugName}', style: TextStyle(
                           color: kPrimaryColor,
                           fontSize: 20,
                           fontWeight: FontWeight.w700),
                           textAlign: TextAlign.center),
-                      content: new Text('ครั้งละ ${druglist[index]
-                          .drugDose} ${druglist[index]
+                      content: new Text('ครั้งละ ${widget.druglist[index]
+                          .drugDose} ${widget.druglist[index]
                           .drugUnitdose}'
                           '  ${statusOrderDrug[int.parse(
-                          druglist[index].drugOrder)]}'),
+                          widget.druglist[index].drugOrder)]}'),
 
                       actions: <Widget>[
                         FlatButton(
@@ -496,15 +527,15 @@ class DruglistCard extends StatelessWidget {
                     border: new Border(
                         right: new BorderSide(
                             width: 1.0, color: Colors.orange))),
-                child: Text(setupTime(druglist[index])),
+                child: Text(setupTime(widget.druglist[index])),
               ),
-              title: Text('วันที่ ${druglist[index].drugStart}',
+              title: Text('วันที่ ${widget.druglist[index].drugStart}',
                   style: TextStyle(
                       fontSize: 16, fontWeight: FontWeight.bold),
                   overflow: TextOverflow.ellipsis),
               subtitle: Text(
-                  '${druglist[index].drugName} ครั้งละ ${druglist[index]
-                      .drugDose} ${druglist[index].drugUnitdose}'),
+                  '${widget.druglist[index].drugName} ครั้งละ ${widget.druglist[index]
+                      .drugDose} ${widget.druglist[index].drugUnitdose}'),
               trailing: IconButton(
                   icon: Icon(
                     Icons.alarm, color: Colors.orangeAccent, size: 30,),
@@ -513,7 +544,7 @@ class DruglistCard extends StatelessWidget {
             ),
           );
         },
-        itemCount: druglist != null ? druglist.length : 0,
+        itemCount: widget.druglist != null ? widget.druglist.length : 0,
       ),
     );
   }
