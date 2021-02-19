@@ -4,9 +4,11 @@ import 'package:flutter_demo/components/Home/CategoriesCard.dart';
 import 'package:flutter_demo/components/Home/ScanScreen.dart';
 import 'package:flutter_demo/components/Home/barcode.dart';
 import 'package:flutter_demo/components/Home/body.dart';
+import 'package:flutter_demo/components/drugprofile/body.dart';
 import 'package:flutter_demo/components/reminder/NotificationPlugin.dart';
 import 'package:flutter_demo/components/reminder/calendar.dart';
 import 'package:flutter_demo/constants.dart';
+import 'package:flutter_demo/screens/Dashboard_screen.dart';
 import 'package:flutter_demo/screens/Medicine_screen.dart';
 import 'package:flutter_demo/screens/Reminder.dart';
 import 'package:geolocator/geolocator.dart';
@@ -187,7 +189,7 @@ class _MyHomePageState extends State<Background> {
                     FlatButton(
                       onPressed: () {
                         Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => notiHome()),
+                          MaterialPageRoute(builder: (context) => drugProfile()),
                         );
                       },
                       child: CategoryCard(
@@ -198,7 +200,7 @@ class _MyHomePageState extends State<Background> {
                     FlatButton(
                       onPressed: () {
                         Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => HomebodyPage()),
+                          MaterialPageRoute(builder: (context) => DashboardScreen()),
                         );
                       },
                       child: CategoryCard(

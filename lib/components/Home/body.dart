@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_demo/components/reminder/calendar.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 
@@ -23,6 +24,8 @@ class _HomePageState extends State {
     fltrNotification = new FlutterLocalNotificationsPlugin();
     fltrNotification.initialize(initilizationsSettings,
         onSelectNotification: notificationSelected);
+
+   // CustomizedNotification();
   }
 
   Future _showNotification() async {
