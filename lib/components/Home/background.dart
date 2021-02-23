@@ -9,6 +9,7 @@ import 'package:flutter_demo/components/reminder/NotificationPlugin.dart';
 import 'package:flutter_demo/components/reminder/calendar.dart';
 import 'package:flutter_demo/constants.dart';
 import 'package:flutter_demo/screens/Dashboard_screen.dart';
+import 'package:flutter_demo/screens/Emergency_screen.dart';
 import 'package:flutter_demo/screens/Medicine_screen.dart';
 import 'package:flutter_demo/screens/Reminder.dart';
 import 'package:geolocator/geolocator.dart';
@@ -200,7 +201,7 @@ class _MyHomePageState extends State<Background> {
                     FlatButton(
                       onPressed: () {
                         Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => DashboardScreen()),
+                          MaterialPageRoute(builder: (context) => EmergencyScreen()),
                         );
                       },
                       child: CategoryCard(
