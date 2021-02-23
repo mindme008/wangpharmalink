@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_demo/screens/AddDoctor_screen.dart';
+import 'package:flutter_demo/screens/Chat_sceen.dart';
 import 'package:flutter_demo/screens/Home_screen.dart';
 import 'package:flutter_demo/screens/Notification_screen.dart';
 import 'package:flutter_demo/screens/Profile_screen.dart';
@@ -35,11 +37,12 @@ class NavItems extends ChangeNotifier{
     NavItem(
     id: 2,
     icon: "assets/icons/comment.svg",
+      destination: ChatScreen(),
     ),
     NavItem(
     id: 3,
     icon: "assets/icons/notification.svg",
-      destination: NotificationScreen(),
+      destination: AddDoctorScreen(),
     ),
     NavItem(
     id: 4,
